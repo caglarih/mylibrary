@@ -2,14 +2,10 @@ import unittest
 from io import StringIO
 from unittest.mock import call, patch
 
-from functions.kidega.product_query import (
-    get_product_price,
-    handler,
-    parse_price_string,
-    QUERY_TEMPLATE,
-)
+from functions.kidega.product_query import KidegaBookExplorer
 
-class ParsePriceStringTest(unittest.TestCase):
+
+class KidegaBookExplorerTest(unittest.TestCase):
 
     def setUp(self, *args, **kwargs):
         self.price_string = "25,20 ₺"
@@ -24,19 +20,22 @@ class ParsePriceStringTest(unittest.TestCase):
         super().setUp(*args, **kwargs)
 
     def test_price_conversion(self):
-        self.assertEqual(parse_price_string(self.price_string), self.price)
+        self.assertEqual(
+            KidegaBookExplorer._parse_price_string(self.price_string),
+            self.price,
+        )
 
     @patch("urllib.request.urlopen")
     def test_get_product_price(self, urlopen_mock):
         self._mock_urlopen_responses(urlopen_mock)
-        price = get_product_price(self.isbn)
+        price = KidegaBookExplorer.get_product_price(self.isbn)
         self._validate_urlopen_calls(urlopen_mock)
         self.assertEqual(price, self.price)
 
     @patch("urllib.request.urlopen")
     def test_handler(self, urlopen_mock):
         self._mock_urlopen_responses(urlopen_mock)
-        response = handler(self.event, object())
+        response = KidegaBookExplorer.handler(self.event, object())
         self._validate_urlopen_calls(urlopen_mock)
         self.assertEqual(response, self.handler_response)
 
@@ -48,7 +47,7 @@ class ParsePriceStringTest(unittest.TestCase):
 
     def _validate_urlopen_calls(self, urlopen_mock):
         urlopen_mock.assert_has_calls([
-            call(QUERY_TEMPLATE % self.isbn),
+            call(KidegaBookExplorer.QUERY_TEMPLATE % self.isbn),
             call("https://kidega.com/kitap/yuz-okuma-sanati-293295/detay"),
         ])
 
