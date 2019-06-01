@@ -1,6 +1,8 @@
 import abc
 from collections import namedtuple
 
+from utils import tree_utils
+
 import requests
 from lxml import html
 
@@ -45,13 +47,7 @@ class AbstractBookExplorer(metaclass=abc.ABCMeta):
     @classmethod
     def get_product_price(cls, query_parameters):
         detail_page_url = cls._get_detail_page_url(query_parameters)
-        response = requests.get(
-            detail_page_url,
-            headers={
-                "User-Agent": USER_AGENT,
-            },
-        )
-        detail_page = html.fromstring(response.content)
+        detail_page = tree_utils.create_from_url(detail_page_url)
         product_price = cls._get_price_string(detail_page)
         return cls._parse_price_string(product_price)
 

@@ -1,10 +1,8 @@
 import re
-
-import requests
-from lxml import html
 from urllib import parse
 
 from functions.product_query.base import AbstractBookExplorer
+from utils import tree_utils
 
 
 __all__ = [
@@ -27,8 +25,9 @@ class KitapyurduBookExplorer(AbstractBookExplorer):
     @classmethod
     def _get_detail_page_url(cls, query_parameters):
         query_url = cls.QUERY_TEMPLATE % parse.quote(query_parameters.name)
-        query_page = html.fromstring(requests.get(query_url).content)
-        for index, isbn_container in enumerate(query_page.xpath(cls.ISBN_LIST_XPATH)):
+        query_page = tree_utils.create_from_url(query_url)
+        product_candidates = query_page.xpath(cls.ISBN_LIST_XPATH)
+        for index, isbn_container in enumerate(product_candidates):
             if isbn_container.attrib["content"] in query_parameters.isbn:
                 anchor = query_page.xpath(cls.DETAIL_PAGE_XPATH)[index]
                 return anchor.attrib["href"]

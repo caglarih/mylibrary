@@ -1,9 +1,7 @@
 import re
 
-import requests
-from lxml import html
-
 from functions.product_query.base import AbstractBookExplorer
+from utils import tree_utils
 
 
 __all__ = [
@@ -24,18 +22,18 @@ class AmazonBookExplorer(AbstractBookExplorer):
 
     @classmethod
     def _get_detail_page_url(cls, query_parameters):
-        query_page_content = cls._get_query_page(query_parameters)
-        query_page = html.fromstring(query_page_content)
+        query_page = cls._get_query_page(query_parameters)
         product_card = query_page.xpath(cls.DETAIL_PAGE_XPATH)[0]
-        return "https://www.amazon.com.tr%s" % product_card.attrib["href"]
+        return "https://www.amazon.com.tr%s" % (
+            "/".join(
+                product_card.attrib["href"].split("/")[:4]
+            ),
+        )
 
     @classmethod
     def _get_query_page(cls, query_parameters):
-        response = requests.get(cls.QUERY_TEMPLATE % query_parameters.isbn)
-        if response.status_code == 200:
-            return response.content
-        else:
-            raise ValueError("Non-200 response from amazon")
+        query_url = cls.QUERY_TEMPLATE % query_parameters.isbn
+        return tree_utils.create_from_url(query_url)
 
     @classmethod
     def _get_price_string(cls, detail_page):

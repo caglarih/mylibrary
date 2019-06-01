@@ -9,3 +9,6 @@ EXPLORERS = [
     KidegaBookExplorer,
     KitapyurduBookExplorer,
 ]
+
+
+get_product_details = KidegaBookExplorer.get_product_details
