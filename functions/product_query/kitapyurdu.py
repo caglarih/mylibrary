@@ -21,7 +21,7 @@ class KitapyurduBookExplorer(AbstractBookExplorer):
     ISBN_LIST_XPATH = '//*[@id="product-table"]/div/div[15]/meta[1]'
     DETAIL_PAGE_XPATH = '//*[@id="product-table"]/div/div[3]/div/a'
     PRICE_STRING_RE = re.compile(
-        r'(?P<upper>([0-9]\w+)).(?P<lower>([0-9]\w+))',
+        r'(?P<upper>([0-9]+)).(?P<lower>([0-9]+))',
     )
 
     @classmethod
@@ -29,7 +29,7 @@ class KitapyurduBookExplorer(AbstractBookExplorer):
         query_url = cls.QUERY_TEMPLATE % parse.quote(query_parameters.name)
         query_page = html.fromstring(requests.get(query_url).content)
         for index, isbn_container in enumerate(query_page.xpath(cls.ISBN_LIST_XPATH)):
-            if isbn_container.attrib["content"] in query_parameters.isbn13:
+            if isbn_container.attrib["content"] in query_parameters.isbn:
                 anchor = query_page.xpath(cls.DETAIL_PAGE_XPATH)[index]
                 return anchor.attrib["href"]
 

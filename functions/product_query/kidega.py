@@ -19,14 +19,14 @@ class KidegaBookExplorer(AbstractBookExplorer):
     PRICE_XPATH = '/html/body/div[2]/div[1]/section/div/div/div[2]' \
         '/div[1]/div/div/div/div[1]/span[3]'
     PRICE_STRING_RE = re.compile(
-        r'(?P<upper>([0-9]\w+)),(?P<lower>([0-9]\w+)) ₺',
+        r'(?P<upper>([0-9]+)),(?P<lower>([0-9]+)) ₺',
     )
 
     @classmethod
     def _get_detail_page_url(cls, query_parameters):
         query_page = html.fromstring(
             requests.get(
-                cls.QUERY_TEMPLATE % query_parameters.isbn13,
+                cls.QUERY_TEMPLATE % query_parameters.isbn,
             ).content,
         )
         product_card = query_page.xpath(cls.DETAIL_PAGE_XPATH)[0]

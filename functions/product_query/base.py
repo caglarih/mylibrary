@@ -13,7 +13,7 @@ __all__ = [
 
 ProductQueryParameters = namedtuple(
     "ProductQueryParameters",
-    "isbn10 isbn13 name",
+    "isbn name",
 )
 
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) ' \

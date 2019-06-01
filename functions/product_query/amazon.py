@@ -19,7 +19,7 @@ class AmazonBookExplorer(AbstractBookExplorer):
         '/div[1]/div/div/div/div[2]/div[2]/div/div[1]/div/div/div/h2/a'
     PRICE_XPATH = '//*[@id="buyNewSection"]/div/div/span/span'
     PRICE_STRING_RE = re.compile(
-        r'(?P<upper>([0-9]\w+)),(?P<lower>([0-9]\w+)) TL',
+        r'(?P<upper>([0-9]+)),(?P<lower>([0-9]+)) TL',
     )
 
     @classmethod
@@ -31,7 +31,7 @@ class AmazonBookExplorer(AbstractBookExplorer):
 
     @classmethod
     def _get_query_page(cls, query_parameters):
-        response = requests.get(cls.QUERY_TEMPLATE % query_parameters.isbn13)
+        response = requests.get(cls.QUERY_TEMPLATE % query_parameters.isbn)
         if response.status_code == 200:
             return response.content
         else:
