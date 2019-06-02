@@ -8,5 +8,5 @@ class Author(models.Model):
 class Book(models.Model):
     name = models.CharField(max_length=256)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    isbn = models.CharField(max_length=13)
+    isbn = models.CharField(max_length=13, unique=True)
     page_count = models.PositiveSmallIntegerField()
