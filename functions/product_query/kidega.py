@@ -52,5 +52,5 @@ class KidegaBookExplorer(AbstractBookExplorer):
             "isbn": query_parameters.isbn,
             "name": name,
             "author": author,
-            "page_count": page_count,
+            "page_count": int(page_count),
         }
