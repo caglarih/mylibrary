@@ -16,6 +16,6 @@ def query_product(isbn):
     ).encode("ascii", "ignore")
     params = ProductQueryParameters(details["isbn"], product_name)
     return {
-        explorer.VENDOR: explorer.get_product_price(params)
+        explorer.SUPPLIER: explorer.get_product_price(params)
         for explorer in EXPLORERS
     }

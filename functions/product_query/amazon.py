@@ -1,7 +1,7 @@
 import re
 
 from functions.product_query.base import AbstractBookExplorer
-from utils import tree_utils
+from utils import tree_utils, book_suppliers
 
 
 __all__ = [
@@ -11,7 +11,7 @@ __all__ = [
 
 class AmazonBookExplorer(AbstractBookExplorer):
 
-    VENDOR = "Amazon"
+    SUPPLIER = book_suppliers.Supplier.AMAZON
     QUERY_TEMPLATE = "https://www.amazon.com.tr/s?k=%s"
     DETAIL_PAGE_XPATH = '//*[@id="search"]/div[1]/div[2]/div/span[3]/div[1]' \
         '/div[1]/div/div/div/div[2]/div[2]/div/div[1]/div/div/div/h2/a'

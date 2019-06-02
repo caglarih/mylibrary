@@ -25,7 +25,7 @@ USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) ' \
 class AbstractBookExplorer(metaclass=abc.ABCMeta):
 
     @abc.abstractproperty
-    def VENDOR():
+    def SUPPLIER():
         raise NotImplementedError
 
     @abc.abstractproperty

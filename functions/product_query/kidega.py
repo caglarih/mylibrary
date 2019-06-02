@@ -1,7 +1,7 @@
 import re
 
 from functions.product_query.base import AbstractBookExplorer
-from utils import tree_utils
+from utils import book_suppliers, tree_utils
 
 
 __all__ = [
@@ -11,7 +11,7 @@ __all__ = [
 
 class KidegaBookExplorer(AbstractBookExplorer):
 
-    VENDOR = "Kidega"
+    SUPPLIER = book_suppliers.Supplier.KIDEGA
     QUERY_TEMPLATE = "https://kidega.com/arama?query=%s"
     DETAIL_PAGE_XPATH = '//*[@id="products"]/div/div/div[2]/div[1]/h4/a'
     PRICE_XPATH = "//span[@class='f26b']"
