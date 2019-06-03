@@ -8,16 +8,19 @@ services:
     image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  django:
+  redis:
+    image: redis:alpine
+  django: &django
     depends_on:
       - db
+      - redis
     build: .
     volumes:
       - .:/app/
-    expose:
-      - 8000
     ports:
       - "8000:8000"
     command: bash run_django.sh
-    environment:
-      READ_DOT_ENV_FILE: "true"
+  celery:
+    <<: *django
+    ports: []
+    command: celery -A mylibrary worker -l info
