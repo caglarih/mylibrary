@@ -37,5 +37,5 @@ class ExploreBookView(View):
             publisher=publisher,
             page_count=details["page_count"],
         )
-        tasks.update_product_prices.delay(book.pk)
+        tasks.update_book_prices.delay(book.pk)
         return HttpResponse(json.dumps(details), status=201)

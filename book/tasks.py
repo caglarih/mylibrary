@@ -8,9 +8,20 @@ from functions.comparison import engine
 from functions.product_query import ProductQueryParameters
 
 
+__all__ = [
+    "update_all_book_prices",
+    "update_book_prices",
+]
+
 
 @shared_task
-def update_product_prices(book_pk):
+def update_all_book_prices():
+    for book_pk in Book.objects.values_list("pk", flat=True):
+        update_book_prices.delay(book_pk)
+
+
+@shared_task
+def update_book_prices(book_pk):
     prices = engine.query_product(book_pk)
     price_orms = {
         bp.supplier: bp

@@ -28,7 +28,6 @@ class KitapyurduBookExplorer(AbstractBookExplorer):
         query_page = tree_utils.create_from_url(query_url)
         product_candidates = query_page.xpath(cls.ISBN_LIST_XPATH)
         for index, isbn_container in enumerate(product_candidates):
-            print(isbn_container.attrib["content"], query_parameters.isbn)
             if isbn_container.attrib["content"] in query_parameters.isbn:
                 anchor = query_page.xpath(cls.DETAIL_PAGE_XPATH)[index]
                 return anchor.attrib["href"]

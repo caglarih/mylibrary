@@ -7,7 +7,7 @@ down:
 bash:
 	docker-compose exec django bash
 shell:
-	docker-compose exec django pyhton manage.py shell
+	docker-compose exec django python manage.py shell
 restart:
 	docker-compose restart
 log:
