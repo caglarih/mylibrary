@@ -10,12 +10,11 @@ from functions.product_query import ProductQueryParameters
 
 
 @shared_task
-def update_product_prices(book_id):
-    book = Book.objects.get(id=book_id)
-    prices = engine.query_product(book.isbn)
+def update_product_prices(book_pk):
+    prices = engine.query_product(book_pk)
     price_orms = {
         bp.supplier: bp
-        for bp in BookPrice.objects.filter(book=book)
+        for bp in BookPrice.objects.filter(book_id=book_pk)
     }
     for supplier, price in prices.items():
         if supplier in price_orms:
@@ -27,7 +26,7 @@ def update_product_prices(book_id):
             price_orm.save()
         else:
             BookPrice.objects.create(
-                book=book,
+                book_id=book_pk,
                 supplier=supplier,
                 price=price,
             )

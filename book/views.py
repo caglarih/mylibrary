@@ -6,6 +6,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 from book.models import Author, Book, Publisher
+from book import tasks
 
 from functions.product_query import (
     get_product_details,
@@ -36,4 +37,5 @@ class ExploreBookView(View):
             publisher=publisher,
             page_count=details["page_count"],
         )
+        tasks.update_product_prices.delay(book.pk)
         return HttpResponse(json.dumps(details), status=201)
