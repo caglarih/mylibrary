@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class Supplier(Enum):
-    AMAZON = 'amazon'
-    KIDEGA = 'kidega'
-    KITAPYURDU = 'kitapyurdu'
+class Supplier(IntEnum):
+    AMAZON = 1
+    KIDEGA = 2
+    KITAPYURDU = 3
