@@ -5,9 +5,9 @@ up:
 down:
 	docker-compose down
 bash:
-	docker-compose exec django bash
+	docker-compose run --rm django bash
 shell:
-	docker-compose exec django python manage.py shell
+	docker-compose run --rm django python manage.py shell
 restart:
 	docker-compose restart
 log:
@@ -15,10 +15,12 @@ log:
 celerylog:
 	docker-compose logs -f celery
 makemigrations:
-	docker-compose exec django python manage.py makemigrations
+	docker-compose run --rm django python manage.py makemigrations
 migrate:
-	docker-compose exec django python manage.py migrate
+	docker-compose run --rm django python manage.py migrate
+test:
+	docker-compose run --rm nosetests tests
+djtest:
+	docker-compose run --rm django python manage.py test
 removedb:
 	docker volume rm mylibrary_postgres_data
-test:
-	nosetests tests

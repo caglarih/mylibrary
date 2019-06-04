@@ -23,13 +23,13 @@ class KidegaBookExplorerTest(unittest.TestCase):
         self.isbn = "ISBN"
         self.parameters = ProductQueryParameters(self.isbn, None)
         self.details = BookDetails(
-            self.isbn,
-            "Ciltsiz",
-            "Normal",
-            284,
-            "Yüz Okuma Sanatı",
-            "Murat Kaplan",
-            "Ayzıt Yayınları",
+            isbn=self.isbn,
+            cover="Ciltsiz",
+            size="Normal",
+            page_count=284,
+            name="Yüz Okuma Sanatı",
+            author="Murat Kaplan",
+            publisher="Ayzıt Yayınları",
         )
         super().setUp(*args, **kwargs)
 
