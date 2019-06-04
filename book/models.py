@@ -36,3 +36,8 @@ class BookPrice(AbstractTimestampedModel):
     supplier = models.CharField(max_length=50, choices=SUPPLIER_CHOICES)
     price = models.PositiveIntegerField()
     history = JSONField(default=list)
+
+    class Meta:
+        unique_together = [
+            ['book', 'supplier'],
+        ]
