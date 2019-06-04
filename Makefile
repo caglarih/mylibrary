@@ -20,3 +20,5 @@ migrate:
 	docker-compose exec django python manage.py migrate
 removedb:
 	docker volume rm mylibrary_postgres_data
+test:
+	nosetests tests

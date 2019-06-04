@@ -12,7 +12,7 @@ Manual Price checks takes lots of time and becames expired quickly. Automate tha
 5. See all services running.
 
 # Tests
-Run `make tests`.
+Run `make test`.
 
 # TODO
 - [ ] Out of Stock conditions

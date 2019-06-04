@@ -1,6 +1,6 @@
 import re
 
-from functions.product_query.base import AbstractBookExplorer
+from functions.product_query.base import AbstractBookExplorer, BookDetails
 from utils import book_suppliers, tree_utils
 
 
@@ -46,9 +46,6 @@ class KidegaBookExplorer(AbstractBookExplorer):
     def get_product_details(cls, query_parameters):
         details_url = cls._get_detail_page_url(query_parameters)
         detail_page = tree_utils.create_from_url(details_url)
-        price = cls._parse_price_string(
-            cls._get_price_string(detail_page),
-        )
         details = {
             key: detail_page.xpath(xpath)[0].text
             for key, xpath in cls.INDIVIDUAL_DETAIL_FIELDS.items()
@@ -59,4 +56,4 @@ class KidegaBookExplorer(AbstractBookExplorer):
             if detail_field:
                 field_name, sanitizer = detail_field
                 details[field_name] = sanitizer(value.text)
-        return details
+        return BookDetails(**details)
