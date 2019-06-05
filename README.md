@@ -21,3 +21,4 @@ Run `make test`.
 - [ ] Flags to report Price updates
 - [ ] Admin registries
 - [ ] Logger
+- [ ] Split ruquirement file
