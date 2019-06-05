@@ -1,0 +1,19 @@
+[
+{
+  "model": "book.bookprice",
+  "pk": "1",
+  "fields": {
+    "created": "2019-06-04T20:26:53.153Z",
+    "modified": "2019-06-04T20:26:53.153Z",
+    "supplier": 2,
+    "book_id": "ISBN",
+    "price": 1234,
+    "history": [
+        [
+            "010119",
+            1111
+        ]
+    ]
+  }
+}
+]

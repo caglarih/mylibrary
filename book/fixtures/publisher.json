@@ -1,0 +1,11 @@
+[
+{
+  "model": "book.publisher",
+  "pk": 1,
+  "fields": {
+    "created": "2019-06-04T20:25:53.006Z",
+    "modified": "2019-06-04T20:25:53.006Z",
+    "name": "Publisher Name"
+  }
+}
+]

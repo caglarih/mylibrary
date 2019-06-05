@@ -1,0 +1,14 @@
+[
+{
+  "model": "book.book",
+  "pk": "ISBN",
+  "fields": {
+    "created": "2019-06-04T20:25:53.153Z",
+    "modified": "2019-06-04T20:25:53.153Z",
+    "name": "Book Name",
+    "author": 1,
+    "publisher": 1,
+    "page_count": 123
+  }
+}
+]

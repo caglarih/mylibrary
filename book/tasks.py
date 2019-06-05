@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from celery import shared_task
 
@@ -27,17 +27,19 @@ def update_book_prices(book_pk):
         bp.supplier: bp
         for bp in BookPrice.objects.filter(book_id=book_pk)
     }
+    today = datetime.now().strftime("%d%m%y")
     for supplier, price in prices.items():
         if supplier in price_orms:
             price_orm = price_orms[supplier]
             if price == price_orm.price:
                 continue
             price_orm.price = price
-            price_orm.history.append((datetime.date.today(), price))
+            price_orm.history.append((today, price))
             price_orm.save()
         else:
             BookPrice.objects.create(
                 book_id=book_pk,
                 supplier=supplier,
                 price=price,
+                history=[(today, price)],
             )

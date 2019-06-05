@@ -1,10 +1,12 @@
 import json
 from unittest.mock import patch
 
+import freezegun
 from django.test import TestCase
 from django.urls import reverse
 
-from book import models
+from book import models, tasks
+from utils.book_suppliers import Supplier
 
 from functions.product_query import (
     BookDetails,
@@ -69,3 +71,76 @@ class ExploreBookViewTestCase(TestCase):
             json.dumps(data),
             content_type="application/json",
         )
+
+
+@freezegun.freeze_time("2019-02-02")
+class BookPriceUpdateTestCase(TestCase):
+
+    fixtures = [
+        "author",
+        "book",
+        "bookprice",
+        "publisher",
+    ]
+
+    def setUp(self):
+        self.supplier = Supplier.KIDEGA
+        self.book_price = models.BookPrice.objects.first()
+        self.price = self.book_price.price
+        self.book = models.Book.objects.first()
+        self.updated_price = self.book_price.price * 2
+        self.today = "020219"
+        self.updated_history = self.book_price.history + [
+            [self.today, self.updated_price],
+        ]
+        super().setUp()
+
+    @patch("functions.comparison.engine.query_product")
+    def test_without_initial(self, query_product_mock):
+        models.BookPrice.objects.all().delete()
+        self._mock_query_product_response(query_product_mock)
+        tasks.update_book_prices(self.book.pk)
+        self._validate_query_product_call(query_product_mock)
+        self._validate_single_book_price_record(
+            self.price,
+            [[self.today, self.price]],
+        )
+
+    @patch("functions.comparison.engine.query_product")
+    def test_with_initial_same_price(self, query_product_mock):
+        self._mock_query_product_response(query_product_mock)
+        tasks.update_book_prices(self.book.pk)
+        self._validate_query_product_call(query_product_mock)
+        self._validate_single_book_price_record(
+            self.price,
+            self.book_price.history,
+        )
+
+    @patch("functions.comparison.engine.query_product")
+    def test_with_initial_different_price(self, query_product_mock):
+        self._mock_query_product_response(
+            query_product_mock,
+            self.updated_price,
+        )
+        tasks.update_book_prices(self.book.pk)
+        self._validate_query_product_call(query_product_mock)
+        self._validate_single_book_price_record(
+            self.updated_price,
+            self.updated_history,
+        )
+
+    def _mock_query_product_response(self, query_product_mock, price=None):
+        query_product_mock.return_value = {
+            self.supplier: price or self.price,
+        }
+
+    def _validate_single_book_price_record(self, price, history):
+        self.assertEqual(models.BookPrice.objects.count(), 1)
+        book_price = models.BookPrice.objects.first()
+        self.assertEqual(book_price.book, self.book)
+        self.assertEqual(book_price.price, price)
+        self.assertEqual(book_price.supplier, self.supplier)
+        self.assertEqual(book_price.history, history)
+
+    def _validate_query_product_call(self, query_product_mock):
+        query_product_mock.assert_called_once_with(self.book.pk)
