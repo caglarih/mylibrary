@@ -29,4 +29,14 @@ class PublisherAdmin(admin.ModelAdmin):
 
 @admin.register(BookPrice)
 class BookPriceAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("get_book_name", "supplier", "price")
+    list_select_related = ("book", )
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset \
+            .order_by("book__name", "price") \
+            .distinct("book__name")
+
+    def get_book_name(self, obj):
+        return obj.book.name

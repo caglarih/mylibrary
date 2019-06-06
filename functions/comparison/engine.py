@@ -22,7 +22,7 @@ def query_product(isbn, name):
     :returns: Supplier to price map
     :rtype: dict
     """
-    product_name = name.split("(")[0].replace("ı", "i")
+    product_name = name.split("(")[0]
     params = ProductQueryParameters(isbn, product_name)
     price_map = {}
     for explorer in EXPLORERS:
