@@ -27,7 +27,8 @@ def update_book_prices(book_pk):
     :param book_pk: Primary key of the Book record
     :type book_pk: str
     """
-    prices = engine.query_product(book_pk)
+    book = Book.objects.get(pk=book_pk)
+    prices = engine.query_product(book_pk, book.name)
     price_orms = {
         bp.supplier: bp
         for bp in BookPrice.objects.filter(book_id=book_pk)

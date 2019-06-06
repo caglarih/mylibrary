@@ -12,22 +12,22 @@ __all__ = [
 ]
 
 
-def query_product(isbn):
+def query_product(isbn, name):
     """Query prices of given isbn numbered book.
 
     :param isbn: ISBN number to get book info
     :type isbn: str
+    :param name: Name of the product
+    :type name: str
     :returns: Supplier to price map
     :rtype: dict
     """
-    params = ProductQueryParameters(isbn)
-    details = get_product_details(params)
-    product_name = unicodedata.normalize(
-        "NFKD",
-        "%s %s" % (details.author, details.name),
-    ).encode("ascii", "ignore")
-    params = ProductQueryParameters(details.isbn, product_name)
-    return {
-        explorer.SUPPLIER: explorer.get_product_price(params)
-        for explorer in EXPLORERS
-    }
+    product_name = name.split("(")[0].replace("ı", "i")
+    params = ProductQueryParameters(isbn, product_name)
+    price_map = {}
+    for explorer in EXPLORERS:
+        try:
+            price_map[explorer.SUPPLIER] = explorer.get_product_price(params)
+        except Exception as e:
+            print(explorer.SUPPLIER, params.__dict__)
+    return price_map

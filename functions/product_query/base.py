@@ -69,5 +69,5 @@ class AbstractBookExplorer(metaclass=abc.ABCMeta):
     def _parse_price_string(cls, price_string):
         group = cls.PRICE_STRING_RE.match(price_string).groupdict()
         upper = int(group["upper"])
-        lower = int(group["lower"])
+        lower = int(group["lower"]) if group["lower"] is not None else 0
         return upper * 100 + lower

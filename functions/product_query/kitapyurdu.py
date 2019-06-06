@@ -16,10 +16,10 @@ class KitapyurduBookExplorer(AbstractBookExplorer):
     QUERY_TEMPLATE = "https://www.kitapyurdu.com/index.php" \
         "?route=product/search&filter_name=%s"
     PRICE_XPATH = '//*[contains(@class, "price-sales")]/meta[1]'
-    ISBN_LIST_XPATH = '//meta[@itemprop="isbn"]'
+    ISBN_LIST_XPATH = '//*[@id="product-table"]//meta[@itemprop="isbn"]'
     DETAIL_PAGE_XPATH = '//*[@id="product-table"]/div/div[3]/div/a'
     PRICE_STRING_RE = re.compile(
-        r'(?P<upper>([0-9]+)).(?P<lower>([0-9]+))',
+        r'(?P<upper>([0-9]+))(.(?P<lower>([0-9]+)))?',
     )
 
     @classmethod
