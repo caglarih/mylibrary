@@ -19,7 +19,7 @@ makemigrations:
 migrate:
 	docker-compose run --rm django python manage.py migrate
 test:
-	docker-compose run --rm nosetests tests
+	docker-compose run --rm django nosetests tests
 djtest:
 	docker-compose run --rm django python manage.py test
 removedb:

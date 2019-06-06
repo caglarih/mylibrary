@@ -19,6 +19,5 @@ Run `make test`.
 - [ ] Periodic Price check
 - [ ] Concurrent api calls
 - [ ] Flags to report Price updates
-- [ ] Admin registries
 - [ ] Logger
 - [ ] Split ruquirement file

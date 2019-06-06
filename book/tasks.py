@@ -22,7 +22,8 @@ def update_all_book_prices():
 
 @shared_task
 def update_book_prices(book_pk):
-    """
+    """Update price data of given book.
+
     :param book_pk: Primary key of the Book record
     :type book_pk: str
     """

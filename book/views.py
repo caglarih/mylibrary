@@ -20,15 +20,15 @@ class ExploreBookView(View):
         """Fetch book data and create records.
 
         :param request: Http request
-        :type request: class:django.http.HttpRequest
-        :rtype: class:django.http.HttpResponse
+        :type request: django.http.HttpRequest
+        :rtype: django.http.HttpResponse
         """
         body = json.loads(request.body)
         isbn = body.get("isbn")
         if isbn is None:
             return HttpResponse(status=400)
         details = product_query.get_product_details(
-            product_query.ProductQueryParameters(isbn, None),
+            product_query.ProductQueryParameters(isbn),
         )
         author, _ = Author.objects.get_or_create(name=details.author)
         publisher, _ = Publisher.objects.get_or_create(name=details.publisher)

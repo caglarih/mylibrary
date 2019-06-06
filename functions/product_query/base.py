@@ -1,6 +1,5 @@
 import abc
 from dataclasses import dataclass
-from collections import namedtuple
 
 from utils import tree_utils
 
@@ -15,10 +14,11 @@ __all__ = [
 ]
 
 
-ProductQueryParameters = namedtuple(
-    "ProductQueryParameters",
-    "isbn name",
-)
+@dataclass
+class ProductQueryParameters:
+    isbn: str
+    name: str = None
+
 
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) ' \
     'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
@@ -38,24 +38,24 @@ class BookDetails:
 
 class AbstractBookExplorer(metaclass=abc.ABCMeta):
 
+    @staticmethod
     @abc.abstractproperty
     def SUPPLIER():
         raise NotImplementedError
 
-    @abc.abstractproperty
-    def QUERY_TEMPLATE():
-        raise NotImplementedError
-
-    @abc.abstractproperty
-    def DETAIL_PAGE_XPATH():
-        raise NotImplementedError
-
-    @abc.abstractproperty
-    def PRICE_XPATH():
-        raise NotImplementedError
-
+    @staticmethod
     @abc.abstractproperty
     def PRICE_STRING_RE():
+        raise NotImplementedError
+
+    @classmethod
+    @abc.abstractmethod
+    def _get_price_string(cls, detail_page):
+        raise NotImplementedError
+
+    @classmethod
+    @abc.abstractmethod
+    def _get_detail_page_url(cls, detail_page):
         raise NotImplementedError
 
     @classmethod

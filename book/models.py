@@ -4,6 +4,14 @@ from django.db import models
 from utils.book_suppliers import Supplier
 
 
+__all__ = [
+    "Author",
+    "Book",
+    "BookPrice",
+    "Publisher",
+]
+
+
 SUPPLIER_CHOICES = [(s.value, s) for s in Supplier]
 
 
@@ -18,9 +26,15 @@ class AbstractTimestampedModel(models.Model):
 class Author(AbstractTimestampedModel):
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Publisher(AbstractTimestampedModel):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class Book(AbstractTimestampedModel):
@@ -29,6 +43,9 @@ class Book(AbstractTimestampedModel):
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
     isbn = models.CharField(max_length=13, primary_key=True, editable=False)
     page_count = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return self.name
 
 
 class BookPrice(AbstractTimestampedModel):
