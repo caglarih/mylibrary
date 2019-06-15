@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from book.models import Author, Book, BookPrice, Publisher
+from book.models import Author, Book, BookPrice, Publisher, ShelfEntry
 
 
 class BookInlineAdmin(admin.TabularInline):
@@ -40,3 +40,10 @@ class BookPriceAdmin(admin.ModelAdmin):
 
     def get_book_name(self, obj):
         return obj.book.name
+
+
+@admin.register(ShelfEntry)
+class ShelfEntryAdmin(admin.ModelAdmin):
+    list_display = ("book", "shelf")
+    list_select_related = ("book", )
+    list_filter = ("shelf", )

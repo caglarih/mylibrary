@@ -5,6 +5,7 @@ import freezegun
 from django.test import TestCase
 from django.urls import reverse
 
+from book.constants import Shelf
 from book import models, tasks
 from utils.book_suppliers import Supplier
 
@@ -49,14 +50,18 @@ class ExploreBookViewTestCase(TestCase):
         self.assertEqual(models.Author.objects.count(), 1)
         self.assertEqual(models.Publisher.objects.count(), 1)
         self.assertEqual(models.Book.objects.count(), 1)
+        self.assertEqual(models.ShelfEntry.objects.count(), 1)
 
     def _validate_created_records(self):
         book = models.Book.objects.first()
+        shelf_entry = book.shelfentry_set.first()
         self.assertEqual(book.author.name, self.details.author)
         self.assertEqual(book.publisher.name, self.details.publisher)
         self.assertEqual(book.isbn, self.details.isbn)
         self.assertEqual(book.page_count, self.details.page_count)
         self.assertEqual(book.name, self.details.name)
+        self.assertEqual(shelf_entry.book, book)
+        self.assertEqual(shelf_entry.shelf, Shelf.TOREAD)
 
     def _validate_price_update_task_call(self, price_updater_mock):
         price_updater_mock.delay.assert_called_once_with(self.details.isbn)
@@ -89,7 +94,7 @@ class BookPriceUpdateTestCase(TestCase):
         self.price = self.book_price.price
         self.book = models.Book.objects.first()
         self.updated_price = self.book_price.price * 2
-        self.today = "020219"
+        self.today = "20190202"
         self.updated_history = self.book_price.history + [
             [self.today, self.updated_price],
         ]
@@ -143,4 +148,4 @@ class BookPriceUpdateTestCase(TestCase):
         self.assertEqual(book_price.history, history)
 
     def _validate_query_product_call(self, query_product_mock):
-        query_product_mock.assert_called_once_with(self.book.pk)
+        query_product_mock.assert_called_once_with(self.book.pk, self.book.name)

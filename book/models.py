@@ -1,6 +1,7 @@
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 
+from book.constants import Shelf
 from utils.book_suppliers import Supplier
 
 
@@ -13,6 +14,7 @@ __all__ = [
 
 
 SUPPLIER_CHOICES = [(s.value, s) for s in Supplier]
+SHELF_CHOICES = [(s.value, s) for s in Shelf]
 
 
 class AbstractTimestampedModel(models.Model):
@@ -58,3 +60,11 @@ class BookPrice(AbstractTimestampedModel):
         unique_together = [
             ['book', 'supplier'],
         ]
+
+
+class ShelfEntry(AbstractTimestampedModel):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    shelf = models.SmallIntegerField(choices=SHELF_CHOICES, db_index=True)
+
+    def __str__(self):
+        return "%s - %s" % (self.book, Shelf(self.shelf).name)

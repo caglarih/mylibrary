@@ -5,7 +5,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
-from book.models import Author, Book, Publisher
+from book.constants import Shelf
+from book.models import Author, Book, Publisher, ShelfEntry
 from book import tasks
 
 from functions import product_query
@@ -39,5 +40,6 @@ class ExploreBookView(View):
             publisher=publisher,
             page_count=details.page_count,
         )
+        ShelfEntry.objects.create(book=book, shelf=Shelf.TOREAD)
         tasks.update_book_prices.delay(book.pk)
         return HttpResponse(json.dumps(details.__dict__), status=201)
