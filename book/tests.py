@@ -61,7 +61,7 @@ class ExploreBookViewTestCase(TestCase):
         self.assertEqual(book.page_count, self.details.page_count)
         self.assertEqual(book.name, self.details.name)
         self.assertEqual(shelf_entry.book, book)
-        self.assertEqual(shelf_entry.shelf, Shelf.TOREAD)
+        self.assertEqual(shelf_entry.shelf, Shelf.TOTRACK)
 
     def _validate_price_update_task_call(self, price_updater_mock):
         price_updater_mock.delay.assert_called_once_with(self.details.isbn)

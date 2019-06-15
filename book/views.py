@@ -40,6 +40,6 @@ class ExploreBookView(View):
             publisher=publisher,
             page_count=details.page_count,
         )
-        ShelfEntry.objects.create(book=book, shelf=Shelf.TOREAD)
+        ShelfEntry.objects.create(book=book, shelf=Shelf.TOTRACK)
         tasks.update_book_prices.delay(book.pk)
         return HttpResponse(json.dumps(details.__dict__), status=201)

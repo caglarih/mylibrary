@@ -10,4 +10,5 @@ class Shelf(IntEnum):
     TOREAD = 1
     READING = 2
     READ = 3
-    OWNED = 3
+    OWNED = 4
+    TOTRACK = 5

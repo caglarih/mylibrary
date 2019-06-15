@@ -2,7 +2,7 @@ from datetime import datetime
 
 from celery import shared_task
 
-from book.models import Book, BookPrice
+from book.models import Book, BookPrice, ShelfEntry
 
 from functions.comparison import engine
 from functions.product_query import ProductQueryParameters
@@ -11,6 +11,7 @@ from functions.product_query import ProductQueryParameters
 __all__ = [
     "update_all_book_prices",
     "update_book_prices",
+    "update_to_track_shelf_prices",
 ]
 
 
@@ -49,3 +50,9 @@ def update_book_prices(book_pk):
                 price=price,
                 history=[(today, price)],
             )
+
+
+@shared_task
+def update_to_track_shelf_prices():
+    for book_pk in ShelfEntry.objects.values_list("book_id", flat=True):
+        update_book_prices.delay(book_pk)
